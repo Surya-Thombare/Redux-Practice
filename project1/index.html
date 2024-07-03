@@ -103,6 +103,24 @@
       };
     };
 
+    function checkAndDisaptch(store, action) {
+      if (
+        action.type === ADD_TODO &&
+        action.todo.name.toLowerCase().indexof('bitcoin') !== -1
+      ) {
+        return alert('Nope, No bitcoin');
+      }
+
+      if (
+        action.type === ADD_GOAL &&
+        action.goal.name.toLowerCase().indexof('bitcoin') !== -1
+      ) {
+        return alert('Nope, No bitcoin');
+      }
+
+      return checkAndDisaptch(store, action);
+    }
+
     // Reducer function
     function todos(state = [], action) {
       switch (action.type) {
@@ -159,7 +177,7 @@
       const text = document.createTextNode(todo.name);
 
       const removeBtn = createRemoveButton(() => {
-        store.dispatch(removeTodoAction(todo.id))
+        checkAndDisaptch(store, removeTodoAction(todo.id))
       })
 
       node.appendChild(text);
@@ -167,7 +185,7 @@
 
       node.style.textDecoration = todo.complete ? 'line-through' : 'none';
       node.addEventListener("click", () => {
-        store.dispatch(toggleTodoAction(todo.id));
+        checkAndDisaptch(store, toggleTodoAction(todo.id));
       })
 
       document.getElementById('todos').appendChild(node);
@@ -178,7 +196,7 @@
       const text = document.createTextNode(goal.name);
 
       const removeBtn = createRemoveButton(() => {
-        store.dispatch(removeGoalAction(goal.id))
+        checkAndDisaptch(store, removeGoalAction(goal.id))
       })
 
       node.appendChild(text);
@@ -203,7 +221,7 @@
 
       input.value = ''
 
-      store.dispatch(addTodoAction({ id: generateId(), name, complete: false }));
+      checkAndDisaptch(store, addTodoAction({ id: generateId(), name, complete: false }));
 
     }
 
@@ -214,7 +232,7 @@
 
       input.value = ''
 
-      store.dispatch(addGoalAction({ id: generateId(), name, }));
+      checkAndDisaptch(store, addGoalAction({ id: generateId(), name, }));
 
     }
 
