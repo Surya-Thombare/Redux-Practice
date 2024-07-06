@@ -4,9 +4,9 @@
 <head>
   <title>Todos/Goals</title>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js'></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src='https://unpkg.com/react@16.13.1/umd/react.development.js'></script>
+  <script src='https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js'></script>
+  <script src='https://unpkg.com/babel-standalone@6.26.0/babel.min.js'></script>
 </head>
 
 <body>
@@ -22,11 +22,8 @@
     <button id='goalBtn'>Add Goal</button>
     <ul id='goals'></ul>
   </div>
-
   <hr />
-
   <div id='app'></div>
-
   <script type='text/javascript'>
     function generateId() {
       return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36)
@@ -183,7 +180,6 @@
     document.getElementById('goalBtn')
       .addEventListener('click', addGoal)
   </script>
-
   <script type="text/babel">
     function List(props) {
       return (
@@ -193,43 +189,57 @@
       )
     }
 
-    const Todos = () => {
+    class Todos extends React.Component {
+      addItem = (e) => {
+        e.preventDefault()
+        const name = this.input.value
+        this.input.value = ''
 
-      return (
-        <div>
-          TODOS
+        this.props.store.dispatch(addTodoAction({
+          id: generateId(),
+          name,
+          complete: false,
+        }))
+      }
+      render() {
+        return (
+          <div>
+            <h1>Todo List</h1>
+            <input
+              type='text'
+              placeholder='Add Todo'
+              ref={(input) => this.input = input}
+            />
+            <button onClick={this.addItem}>Add Todo</button>
 
-          <List />
-        </div>
-      )
-
+            <List />
+          </div>
+        )
+      }
     }
-
-    const Goals = () => {
-
-      return (
-        <div>
-          GOALS
-
-          <List />
-        </div>
-      )
-
+    class Goals extends React.Component {
+      render() {
+        return (
+          <div>
+            GOALS
+            <List />
+          </div>
+        )
+      }
     }
-
-    const App = () => {
-
-      return (
-        <div>
-          <Todos />
-          <Goals />
-        </div>
-      )
-
+    class App extends React.Component {
+      render() {
+        return (
+          <div>
+            <Todos store={this.props.store} />
+            <Goals />
+          </div>
+        )
+      }
     }
 
     ReactDOM.render(
-      <App />,
+      <App store={store} />,
       document.getElementById('app')
     )
   </script>
