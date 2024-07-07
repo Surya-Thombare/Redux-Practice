@@ -330,7 +330,7 @@
       loading: state.loading
     }))(App)
 
-    const Context = React.createClass({})
+    const Context = React.createContext({})
 
     function connect(mapStateToProps) {
       return (Component) => {
