@@ -295,6 +295,35 @@
       }
     }
 
+    class ConnectedGoals extends React.Component {
+      render() {
+        return (
+          <Context.Consumer>
+            {(store) => {
+              const { goals } = store.getState()
+
+              return <Goals dispatch={store.dispatch} goals={goals} />
+
+            }}
+          </Context.Consumer>
+        )
+      }
+    }
+
+    class ConnectedTodos extends React.Component {
+      render() {
+        return (
+          <Context.Consumer>
+            {(store) => {
+              const { todos } = store.getState()
+
+              return <Todos dispatch={store.dispatch} todos={todos} />
+            }}
+          </Context.Consumer>
+        )
+      }
+    }
+
 
     class App extends React.Component {
 
@@ -305,8 +334,6 @@
       }
 
       render() {
-        const { store } = this.props
-        const { todos, goals, loading } = this.props.store.getState()
 
         if (loading) {
           return <h3>Loading...</h3>
@@ -314,8 +341,8 @@
 
         return (
           <div>
-            <Todos dispatch={store.dispatch} todos={todos} />
-            <Goals dispatch={store.dispatch} goals={goals} />
+            <ConnectedTodos />
+            <ConnectedGoals />
           </div>
         )
       }
