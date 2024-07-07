@@ -335,6 +335,8 @@
 
       render() {
 
+        const { loading } = this.props.store.getState()
+
         if (loading) {
           return <h3>Loading...</h3>
         }
