@@ -33,6 +33,29 @@
       }
     }
 
+    function handleDeleteGoal(goal) {
+      return (dispatch) => {
+        dispatch(removeGoalAction(goal.id))
+        return API.deleteGoal(goal.id)
+          .catch(() => {
+            dispatch(addGoalAction({ goal }))
+            alert('An error occurred. try again')
+          })
+      }
+    }
+
+
+    function handleAddGoal(name, cb) {
+      return (dispatch) => {
+        return API.saveGoal(name)
+          .then((goal) => {
+            dispatch(addGoalAction(goal))
+            cb()
+          })
+          .catch(() => alter('There was an error. Try again.'))
+      }
+    }
+
     function handleDeleteTodo(todo) {
       return (dispatch) => {
         dispatch(removeTodoAction(todo.id))
@@ -153,6 +176,7 @@
 
   </script>
   <script type="text/babel">
+
     function List(props) {
       return (
         <ul>
@@ -222,27 +246,15 @@
 
       addGoal = (e) => {
         e.preventDefault()
-        const name = this.input.value
 
-        return API.saveGoal(name)
-          .then((goal) => {
-            this.props.store.dispatch(addGoalAction(goal))
-            this.input.value = ''
-          })
-          .catch(() => alter('There was an error. Try again.'))
+        const name = this.input.value
+        this.props.store.dispatch(handleAddGoal(name, () => this.input.value = ''))
+
 
       }
 
       removeItem = (goal) => {
-
-        this.props.store.dispatch(removeGoalAction(goal.id))
-
-        return API.deleteGoal(goal.id)
-          .catch(() => {
-            this.props.store.dispatch(addGoalAction({ goal }))
-            alert('An error occurred. try again')
-          })
-
+        this.props.store.dispatch(handleDeleteGoal(goal))
 
       }
 
