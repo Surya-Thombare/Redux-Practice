@@ -8,6 +8,7 @@
   <script src='https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js'></script>
   <script src='https://unpkg.com/babel-standalone@6.26.0/babel.min.js'></script>
   <script src='https://ui.dev/goals-todos-api/index.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.2.0/redux-thunk.min.js"></script>
 </head>
 
 <body>
@@ -157,13 +158,6 @@
       return result
     }
 
-    const thunk = (store) => (next) => (action) => {
-      if (typeof action === 'function') {
-        return action(store.dispatch)
-      }
-
-      return next(action)
-    }
     // Reducer function
     function todos(state = [], action) {
       switch (action.type) {
@@ -208,7 +202,7 @@
       todos,
       goals,
       loading,
-    }), Redux.applyMiddleware(checker, logger, thunk))
+    }), Redux.applyMiddleware(ReduxThunk.default, checker, logger))
 
   </script>
   <script type="text/babel">
