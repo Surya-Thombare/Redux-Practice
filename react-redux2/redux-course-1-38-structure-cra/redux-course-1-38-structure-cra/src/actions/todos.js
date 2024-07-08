@@ -32,7 +32,7 @@ export function handleDeleteTodo(todo) {
     dispatch(removeTodo(todo.id))
     return API.deleteTodo(todo.id)
       .catch(() => {
-        dispatch(addTodoAction({ todo }))
+        dispatch(addTodo({ todo }))
         alert('An error occurred. try again')
       })
   }
