@@ -1,45 +1,42 @@
 import * as React from "react"
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import List from './list'
 import { handleAddTodo, handleDeleteTodo, handleToggleTodo } from "../actions/todos"
 
-class Todos extends React.Component {
-  addItem = (e) => {
+export default function Todos() {
+  const input = React.useRef('')
+  const dispatch = useDispatch()
+  const todos = useSelector((state) => state.todos)
+
+  const addItem = (e) => {
     e.preventDefault()
-    const name = this.input.value
-    this.props.dispatch(handleAddTodo(name, () => this.input.value = ''))
+    const name = input.current.value
+    dispatch(handleAddTodo(name, () => input.current.value = ''))
   }
 
-  removeItem = (todo) => {
-    this.props.dispatch(handleDeleteTodo(todo))
+  const removeItem = (todo) => {
+    dispatch(handleDeleteTodo(todo))
   }
 
-  toggleTodo = (todo) => {
-    this.props.dispatch(handleToggleTodo(todo.id))
+  const toggleTodo = (todo) => {
+    dispatch(handleToggleTodo(todo.id))
   }
 
-  render() {
-    return (
-      <div>
-        <h1>Todo List With React</h1>
-        <input
-          type='text'
-          placeholder='Add Todo'
-          ref={(input) => this.input = input}
-        />
-        <button onClick={this.addItem}>Add Todo</button>
+  return (
+    <div>
+      <h1>Todo List With React</h1>
+      <input
+        type='text'
+        placeholder='Add Todo'
+        ref={input}
+      />
+      <button onClick={addItem}>Add Todo</button>
 
-        <List
-          items={this.props.todos}
-          remove={this.removeItem}
-          toggleItem={this.toggleTodo}
-        />
-      </div>
-    )
-  }
+      <List
+        items={todos}
+        remove={removeItem}
+        toggleItem={toggleTodo}
+      />
+    </div>
+  )
 }
-
-
-export default connect((state) => ({
-  todos: state.todos
-}))(Todos)
